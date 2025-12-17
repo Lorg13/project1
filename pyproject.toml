@@ -4,10 +4,7 @@
     description = "Add your description here"
     readme = "README.md"
     requires-python = ">=3.14"
-    dependencies = [
-        "pytest>=9.0.2",
-        "pytest-mock>=3.15.1",
-    ]
+    dependencies = []
 
 [project.scripts]
     zephyr = "zephyr:main"
@@ -28,6 +25,8 @@
         "bandit==1.9.1"
     ]
     test = [
+        "pytest>=9.0.2",
+        "pytest-mock>=3.15.1",
     ]
 
 [tool.ruff]
