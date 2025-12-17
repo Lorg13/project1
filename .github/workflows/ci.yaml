@@ -1,0 +1,11 @@
+name: Check pull request
+
+on:
+    pull_request:
+        branches:
+            - main
+            - patch/**
+
+permissions: read
+
+jobs:
