@@ -65,7 +65,7 @@ jobs:
       - name: Run pytest
         run: |
           uv run pytest tests \
-            --cov=src
+            --cov=src \
             --doctest-modules \
             --cov-report markdown-append:$GITHUB_STEP_SUMMARY \
             --junitxml=junit/test-results.xml \
