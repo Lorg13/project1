@@ -1,2 +1,12 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def main() -> None:
-    print("Hello from zephyr!")
+    logger.info("Hello from zephyr!")
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    main()
