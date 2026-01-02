@@ -1,0 +1,43 @@
+name: CD
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  workflow_run:
+    workflows: ["Check pull request"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+      - name: Deploy
+        run: |
+          ssh appy@100.64.0.10 "
+            docker login ghcr.io -u appy1995 -p $GHCR_PAT &&
+            docker pull ghcr.io/${{ github.repository }}:${{ github.sha }} &&
+            docker stop project1 || true &&
+            docker rm project1 || true &&
+            docker run -d --name project1 -p 80:80 ghcr.io/${{ github.repository }}:${{ github.sha }}
+          "
+        env:
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
